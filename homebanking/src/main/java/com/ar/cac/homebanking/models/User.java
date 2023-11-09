@@ -20,4 +20,11 @@ public class User {
     @Column(name = "contrasena")
     private String password;
 
+    @Column(name = "nombre")
+    private String name;
+
+    @Column(name = "apellido")
+    private String surname;
+
+    private String dni;
 }
