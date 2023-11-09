@@ -4,6 +4,8 @@ import com.ar.cac.tpfinal.entities.User;
 import com.ar.cac.tpfinal.entities.dtos.UserDto;
 import com.ar.cac.tpfinal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,33 +24,29 @@ public class UserController {
 
     // Necesito obtener una instancia del servicio de usuarios
     @Autowired
-    private final UserService service;
+    private UserService service;
 
-    public UserController(UserService service){
-        this.service = service;
-    }
 
     // Obtener una lista de usuarios registrados
 
     @GetMapping(value = "/users")
-    public List<User> getUsers(){
-        return service.getUsers();
+    public ResponseEntity<List<User>> getUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getUsers());
     }
 
     // Obtener la info de un solo usuario
 
 
     @GetMapping(value = "/users/{id}")
-    public User getUserById(@PathVariable Long id){
-        //return "Cristian";
-        return service.getUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getUserById(id));
     }
 
     // Crear/Registrar un usuario
 
     @PostMapping(value = "/users")
-    public UserDto createUser(@RequestBody UserDto user){
-        return service.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(user));
     }
 
     // Modificar TOTALMENTE un usuario (PUT)
