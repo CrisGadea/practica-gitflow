@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepository repository;
 
     public UserService(UserRepository repository){
@@ -28,6 +27,7 @@ public class UserService {
 
     public User getUserById(Long id){
         User user = repository.findById(id).get();
+        user.setPassword("******");
         return user;
     }
 
@@ -39,5 +39,14 @@ public class UserService {
         return user;
     }
 
-
+    public String deleteUser(Long id){
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+            return "El usuario con id: " + id + " ha sido eliminado";
+        } else {
+            return "El usuario con id: " + id + ", no ha sido eliminado";
+        }
     }
+
+
+}

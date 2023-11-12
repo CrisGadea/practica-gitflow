@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     // POR CADA ACCIÓN/METODO HTTP QUE USTEDES QUIERAN IMPLEMENTAR/PERMITIR
@@ -26,10 +26,9 @@ public class UserController {
     @Autowired
     private UserService service;
 
-
     // Obtener una lista de usuarios registrados
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public ResponseEntity<List<User>> getUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(service.getUsers());
     }
@@ -37,19 +36,20 @@ public class UserController {
     // Obtener la info de un solo usuario
 
 
-    @GetMapping(value = "/users/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.getUserById(id));
     }
 
     // Crear/Registrar un usuario
 
-    @PostMapping(value = "/users")
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(user));
     }
 
     // Modificar TOTALMENTE un usuario (PUT)
+    @PutMapping(value = "/{id}")
     public String updateFullUser(){
         return "";
     }
@@ -57,14 +57,16 @@ public class UserController {
 
     // Modificar PARCIALMENTE un usuario (PATCH)
 
+    @PatchMapping(value = "/{id}")
     public String updateParcialUser(){
         return "";
     }
 
     // Eliminar un usuario
 
-    public void deleteUser(){
-
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(service.deleteUser(id));
     }
 
 }
