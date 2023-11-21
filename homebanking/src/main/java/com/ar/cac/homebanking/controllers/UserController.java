@@ -5,7 +5,6 @@ import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,22 +45,13 @@ public class UserController {
     }
 
     @PutMapping(value="/{id}")
-    public void updateAllUser(@PathVariable Long id){
-
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO user){
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateUser(id, user));
     }
 
-    @PatchMapping(value="/{id}")
-    public void updateUser(@PathVariable Long id){
-
-    }
-
-    // TODO: Refactor en Exception
     @DeleteMapping(value="/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.deleteUser(id));
     }
-
-    // Metodo para validar caracteres del email
-
 
 }

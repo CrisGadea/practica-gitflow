@@ -32,8 +32,14 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO userDto){
-        User user = repository.save(UserMapper.dtoToUser(userDto));
-        return UserMapper.userToDto(user);
+        User userValidated = validateUserByEmail(userDto);
+        if (userValidated == null){
+            User userSaved = repository.save(UserMapper.dtoToUser(userDto));
+            return UserMapper.userToDto(userSaved);
+        } else{
+            throw new UserNotExistsException("Usuario con mail: " + userDto.getEmail() + " ya existe");
+        }
+
     }
 
 
@@ -50,5 +56,44 @@ public class UserService {
             throw new UserNotExistsException("El usuario a eliminar elegido no existe");
         }
 
+    }
+
+    public UserDTO updateUser(Long id, UserDTO dto) {
+        if (repository.existsById(id)){
+            User userToModify = repository.findById(id).get();
+            // Validar qué datos no vienen en null para setearlos al objeto ya creado
+
+            // Logica del Patch
+            if (dto.getName() != null){
+                userToModify.setName(dto.getName());
+            }
+
+            if (dto.getSurname() != null){
+                userToModify.setSurname(dto.getSurname());
+            }
+
+            if (dto.getEmail() != null){
+                userToModify.setEmail(dto.getEmail());
+            }
+
+            if (dto.getPassword() != null){
+                userToModify.setPassword(dto.getPassword());
+            }
+
+            if (dto.getDni() != null){
+                userToModify.setDni(dto.getDni());
+            }
+
+            User userModified = repository.save(userToModify);
+
+            return UserMapper.userToDto(userModified);
+        }
+
+        return null;
+    }
+
+    // Validar que existan usuarios unicos por mail
+    public User validateUserByEmail(UserDTO dto){
+        return repository.findByEmail(dto.getEmail());
     }
 }
